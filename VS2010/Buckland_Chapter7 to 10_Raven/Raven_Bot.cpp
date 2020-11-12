@@ -37,6 +37,7 @@ Raven_Bot::Raven_Bot(Raven_Game* world,Vector2D pos):
                  
                  m_iMaxHealth(script->GetInt("Bot_MaxHealth")),
                  m_iHealth(script->GetInt("Bot_MaxHealth")),
+                 m_iDeadCount(0),
                  m_pPathPlanner(NULL),
                  m_pSteering(NULL),
                  m_pWorld(world),
@@ -521,8 +522,8 @@ void Raven_Bot::Render()
   gdi->TextColor(0,255,0);
 
   if (UserOptions->m_bShowBotIDs)
-  {
-    gdi->TextAtPos(Pos().x -10, Pos().y-20, ttos(ID()));
+  {    
+    gdi->TextAtPos(Pos().x - 10, Pos().y - 20, ttos(ID()));    
   }
 
   if (UserOptions->m_bShowBotHealth)
@@ -532,7 +533,7 @@ void Raven_Bot::Render()
 
   if (UserOptions->m_bShowScore)
   {
-    gdi->TextAtPos(Pos().x-40, Pos().y+10, "Scr:"+ ttos(Score()));
+    gdi->TextAtPos(Pos().x-40, Pos().y+10, "Scr:"+ ttos(Score()) +" | Dead:" + ttos(DeadCount()));
   }    
 }
 

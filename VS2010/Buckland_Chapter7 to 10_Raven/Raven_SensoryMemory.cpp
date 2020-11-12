@@ -100,7 +100,10 @@ void Raven_SensoryMemory::UpdateVision()
       if (m_pOwner->GetWorld()->isLOSOkay(m_pOwner->Pos(), (*curBot)->Pos()))
       {
         info.bShootable = true;
-
+        
+        //Ã¼·Â ¾ò¾î¿È
+        info.iHealth = (*curBot)->Health();
+        info.iDeadCount = (*curBot)->DeadCount();
               //test if the bot is within FOV
         if (isSecondInFOVOfFirst(m_pOwner->Pos(),
                                  m_pOwner->Facing(),

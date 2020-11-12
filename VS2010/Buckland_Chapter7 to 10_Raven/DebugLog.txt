@@ -73,11 +73,107 @@ Creating a shotgun
 Creating a shotgun
 Creating a rocket_launcher
 maps/Raven_DM1.map loaded okay
+BOT 402 IS STUCK!!
+BOT 586 IS STUCK!!
+BOT 816 IS STUCK!!
+BOT 639 IS STUCK!!
+BOT 947 IS STUCK!!
+BOT 578 IS STUCK!!
+BOT 603 IS STUCK!!
+BOT 680 IS STUCK!!
+BOT 578 IS STUCK!!
+BOT 850 IS STUCK!!
+BOT 663 IS STUCK!!
+BOT 600 IS STUCK!!
+BOT 562 IS STUCK!!
+BOT 693 IS STUCK!!
+BOT 615 IS STUCK!!
+BOT 615 IS STUCK!!
+BOT 578 IS STUCK!!
+BOT 562 IS STUCK!!
+BOT 615 IS STUCK!!
+BOT 578 IS STUCK!!
+BOT 562 IS STUCK!!
+BOT 788 IS STUCK!!
 BOT 403 IS STUCK!!
+BOT 693 IS STUCK!!
+BOT 816 IS STUCK!!
+BOT 586 IS STUCK!!
+BOT 680 IS STUCK!!
+BOT 816 IS STUCK!!
+BOT 600 IS STUCK!!
+BOT 663 IS STUCK!!
+BOT 595 IS STUCK!!
+BOT 693 IS STUCK!!
+BOT 816 IS STUCK!!
+BOT 680 IS STUCK!!
+BOT 586 IS STUCK!!
+BOT 562 IS STUCK!!
+BOT 875 IS STUCK!!
+BOT 816 IS STUCK!!
+Filename: 
+BOT 402 IS STUCK!!
 BOT 403 IS STUCK!!
-BOT 401 IS STUCK!!
-Player Possesses bot 402
-BOT 401 IS STUCK!!
+BOT 546 IS STUCK!!
+BOT 560 IS STUCK!!
+BOT 562 IS STUCK!!
+BOT 563 IS STUCK!!
+BOT 578 IS STUCK!!
+BOT 581 IS STUCK!!
+BOT 586 IS STUCK!!
+BOT 595 IS STUCK!!
+BOT 600 IS STUCK!!
+BOT 603 IS STUCK!!
+BOT 610 IS STUCK!!
+BOT 615 IS STUCK!!
+BOT 630 IS STUCK!!
+BOT 639 IS STUCK!!
+BOT 663 IS STUCK!!
+BOT 680 IS STUCK!!
+BOT 693 IS STUCK!!
+BOT 708 IS STUCK!!
+BOT 748 IS STUCK!!
+BOT 773 IS STUCK!!
+BOT 788 IS STUCK!!
+BOT 816 IS STUCK!!
+BOT 850 IS STUCK!!
+BOT 875 IS STUCK!!
+BOT 947 IS STUCK!!
+BOT 610 IS STUCK!!
+BOT 947 IS STUCK!!
+BOT 586 IS STUCK!!
+BOT 663 IS STUCK!!
+BOT 816 IS STUCK!!
 deleting raven bot (id = 401)
 deleting raven bot (id = 402)
 deleting raven bot (id = 403)
+deleting raven bot (id = 546)
+deleting raven bot (id = 560)
+deleting raven bot (id = 561)
+deleting raven bot (id = 562)
+deleting raven bot (id = 563)
+deleting raven bot (id = 564)
+deleting raven bot (id = 578)
+deleting raven bot (id = 581)
+deleting raven bot (id = 586)
+deleting raven bot (id = 595)
+deleting raven bot (id = 600)
+deleting raven bot (id = 603)
+deleting raven bot (id = 610)
+deleting raven bot (id = 615)
+deleting raven bot (id = 630)
+deleting raven bot (id = 639)
+deleting raven bot (id = 652)
+deleting raven bot (id = 663)
+deleting raven bot (id = 680)
+deleting raven bot (id = 693)
+deleting raven bot (id = 708)
+deleting raven bot (id = 733)
+deleting raven bot (id = 748)
+deleting raven bot (id = 773)
+deleting raven bot (id = 788)
+deleting raven bot (id = 816)
+deleting raven bot (id = 835)
+deleting raven bot (id = 850)
+deleting raven bot (id = 875)
+deleting raven bot (id = 947)

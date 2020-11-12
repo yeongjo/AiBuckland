@@ -47,6 +47,10 @@ public:
   //permitting a shot.
   bool        bShootable;
   
+  //Àû Ã¼·Â
+  int         iHealth;
+  //Àû Á×Àº È½¼ö
+  int         iDeadCount;
 
   MemoryRecord():fTimeLastSensed(-999),
             fTimeBecameVisible(-999),
