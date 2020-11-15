@@ -56,7 +56,9 @@ public:
             fTimeBecameVisible(-999),
             fTimeLastVisible(0),
             bWithinFOV(false),
-            bShootable(false)
+            bShootable(false),
+            iHealth(100),
+            iDeadCount(0)
   {}
 };
 
