@@ -22,6 +22,7 @@ void Raven_SensoryMemory::MakeNewRecordIfNotAlreadyPresent(Raven_Bot* pOpponent)
   {
     m_MemoryMap[pOpponent] = MemoryRecord();
   }
+  
 }
 
 //------------------------ RemoveBotFromMemory --------------------------------

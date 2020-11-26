@@ -4,6 +4,7 @@
 #include "debug/DebugConsole.h"
 
 
+
 //-------------------------------- ctor ---------------------------------------
 //-----------------------------------------------------------------------------
 Raven_TargetingSystem::Raven_TargetingSystem(Raven_Bot* owner):m_pOwner(owner),
@@ -30,14 +31,15 @@ void Raven_TargetingSystem::Update()
     if ((*curBot)->isAlive() && (*curBot != m_pOwner) )
     {
       double dist = Vec2DDistanceSq((*curBot)->Pos(), m_pOwner->Pos());
-
-      //나를 쏘고있는가?, 나를 바라보고있는가?, 딸피인가, 가까운가, 적의 사거리가 나보다 짧은가, 
+      
+      //나를 쏘고있는가?, 나를 바라보고있는가?, 딸피인가(내가 쏜적있는 적인가?), 가까운가, 적의 사거리가 나보다 짧은가, 
       if (dist < ClosestDistSoFar)
       {
           Vector2D toTarget = Vec2DNormalize((*curBot)->Pos() - m_pOwner->Pos());
           double dot = (*curBot)->Facing().Dot(toTarget);
           //1에 가까울수록 나랑 마주보고있음
-          debug_con << m_pOwner->ID()<<": "<<(*curBot)->ID()<<" = " <<dot<<"";
+          //TODO 타겟팅 시스템          
+          //debug_con << m_pOwner->ID()<<": "<<(*curBot)->ID()<<" = " <<dot<<"";
           if (dot > 0) {
               ClosestDistSoFar = dist;
               m_pCurrentTarget = *curBot;
