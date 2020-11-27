@@ -3,6 +3,7 @@
 #include "time/crudetimer.h"
 #include "misc/cgdi.h"
 #include "misc/Stream_Utility_Functions.h"
+#include "Debug/DebugConsole.h"
 
 //------------------------------- ctor ----------------------------------------
 //-----------------------------------------------------------------------------
@@ -38,7 +39,53 @@ void Raven_SensoryMemory::RemoveBotFromMemory(Raven_Bot* pBot)
     m_MemoryMap.erase(record);
   }
 }
+
+void Raven_SensoryMemory::RemoveHitBots(Raven_Bot* mBot, Raven_Bot* pBot)
+{      
+    //TODO 왜 안되지이ㅏㄴ어ㅣㅏㄴ렁니ㅏㅓㄹ아러ㅣ안러ㅣㄴㅇ러    
+    debug_con << "되긴하니?"<<"";
+    for (auto i = m_MemoryMap[m_pOwner].hitBots.begin(); i != m_MemoryMap[m_pOwner].hitBots.end(); ++i)
+    {
+        if ((*i) == pBot) {
+            m_MemoryMap[m_pOwner].hitBots.erase(i);
+            debug_con << m_pOwner->ID() << ": 맞췄던 봇 죽여서 [" << pBot->ID() << "] 지운다..." << "";
+        }
+            
+    }
+
+    //record->second.hitBots
+    ////TODO
+    ////std::vector<Raven_Bot*> help;
+    ////help = (mBot->GetSensoryMem())->GetHitbots();
+    //
+    //for (int i = 0; i < m_MemoryMap[m_pOwner].hitBots.size(); i++)
+    //{
+    //    debug_con << i<<"번째 원래 안에 든거" << (m_MemoryMap[m_pOwner].hitBots[i])->ID() << "아직 남았다" << "";
+    //}
+
+    //for (auto i = 0; i < m_MemoryMap[m_pOwner].hitBots.size(); ++i)
+    //{
+    //    if (m_MemoryMap[m_pOwner].hitBots[i] == pBot)
+    //    {
+    //        debug_con << m_pOwner->ID() << ": 맞췄던 봇 죽여서 ["<< pBot->ID()<<"] 지운다..." << "";
+    //        m_MemoryMap[m_pOwner].hitBots.erase(m_MemoryMap[m_pOwner].hitBots.begin()+i);
+    //        break;
+    //    }
+    //}
   
+    //for (int i = 0; i < m_MemoryMap[m_pOwner].hitBots.size(); i++)
+    //{
+    //    debug_con <<"살려줘"<< (m_MemoryMap[m_pOwner].hitBots[i])->ID() << "아직 남았다" << "";
+    //}
+}
+
+void Raven_SensoryMemory::RemoveHitBotsAll(Raven_Bot* mBot)
+{
+    debug_con << m_pOwner->ID() <<": 죽어서 맞춘애들 초기화 한다..." << "";
+    m_MemoryMap[mBot].hitBots.clear();
+}
+
+
 //----------------------- UpdateWithSoundSource -------------------------------
 //
 // this updates the record for an individual opponent. Note, there is no need to
@@ -74,6 +121,36 @@ void Raven_SensoryMemory::UpdateWithSoundSource(Raven_Bot* pNoiseMaker)
   }
 }
 
+
+void Raven_SensoryMemory::UpdateHit(Raven_Bot* pBot)
+{
+    const std::list<Raven_Bot*>& bots = m_pOwner->GetWorld()->GetAllBots();
+    std::list<Raven_Bot*>::const_iterator curBot;
+
+    for (curBot = bots.begin(); curBot != bots.end(); ++curBot)
+    {
+        //make sure the bot being examined is not this bot
+        if (m_pOwner != *curBot)
+        {
+            MakeNewRecordIfNotAlreadyPresent(*curBot);
+
+            //get a reference to this bot's data
+            MemoryRecord& info = m_MemoryMap[*curBot];
+
+            //내가 맞춘애가 맞으면 넣음
+            if (!(std::find(info.hitBots.begin(), info.hitBots.end(), pBot) != info.hitBots.end()))
+            {
+                info.hitBots.push_back(pBot);
+                //debug_con << "쏜애 맞은놈 벡터에 " << m_pOwner->ID() << " 맞은애 넣음 " << (*curBot)->ID() << "";
+                for (int i = 0; i < info.hitBots.size(); i++)
+                {
+                    debug_con << "[" << m_pOwner->ID() << "스텍]" << i << "번째 맞은놈" << info.hitBots[i]->ID() << "";
+                }
+            }
+        }
+    }
+}
+
 //----------------------------- UpdateVision ----------------------------------
 //
 //  this method iterates through all the bots in the game world to test if
@@ -97,11 +174,12 @@ void Raven_SensoryMemory::UpdateVision()
       //get a reference to this bot's data
       MemoryRecord& info = m_MemoryMap[*curBot];
 
+
+
       //test if there is LOS between bots 
       if (m_pOwner->GetWorld()->isLOSOkay(m_pOwner->Pos(), (*curBot)->Pos()))
       {
-        info.bShootable = true;
-        
+        info.bShootable = true;        
         //체력 얻어옴
         info.iHealth = (*curBot)->Health();
         info.iDeadCount = (*curBot)->DeadCount();
@@ -282,4 +360,32 @@ void  Raven_SensoryMemory::RenderBoxesAroundRecentlySensed()const
     gdi->Line(p.x-b, p.y+b, p.x-b, p.y-b);
   }
 
+}
+
+std::vector<Raven_Bot*> Raven_SensoryMemory::GetHitbots() const
+{
+    //this will store all the opponents the bot can remember
+    std::vector<Raven_Bot*> opponents;
+
+    double CurrentTime = Clock->GetCurrentTime();
+
+
+    MemoryMap::const_iterator curRecord = m_MemoryMap.begin();
+    for (curRecord; curRecord != m_MemoryMap.end(); ++curRecord)
+    {
+        if (((CurrentTime - curRecord->second.fTimeLastSensed) <= m_dMemorySpan) && 
+            (curRecord->second).hitBots.size() > 0) {
+            for (auto i = (curRecord->second).hitBots.begin(); i != (curRecord->second).hitBots.end(); ++i)
+            {
+                {
+                    opponents.push_back(*i);
+                }
+            }
+        }
+    }
+    return opponents;
+}
+
+void Raven_SensoryMemory::EraseHitbot(Raven_Bot* pBot)
+{
 }

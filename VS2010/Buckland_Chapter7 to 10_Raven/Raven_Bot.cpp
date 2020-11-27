@@ -223,7 +223,7 @@ bool Raven_Bot::HandleMessage(const Telegram& msg)
     //handle any messages not handles by the goals
     switch (msg.Msg)
     {
-    case Msg_TakeThatMF:
+    case Msg_TakeThatMF:{
         //총 맞았을 때
         //just return if already dead or spawning
         if (isDead() || isSpawning()) return true;
@@ -241,6 +241,9 @@ bool Raven_Bot::HandleMessage(const Telegram& msg)
         //if this bot is now dead let the shooter know
         if (isDead())
         {
+            //죽었을 때 내가 맞췄던 벡터 초기화 시켜줘야함
+            Raven_Bot* me = m_pWorld->GetBotByID(ID());
+            GetSensoryMem()->RemoveHitBotsAll(me);
             Dispatcher->DispatchMsg(SEND_MSG_IMMEDIATELY,
                 ID(),
                 msg.Sender,
@@ -248,15 +251,20 @@ bool Raven_Bot::HandleMessage(const Telegram& msg)
                 NO_ADDITIONAL_INFO);
         }
         return true;
+    }
+    case Msg_YouGotMeYouSOB:        {
+        //내가 맞췄던 리스트에서 지워야함
+        Raven_Bot* me = m_pWorld->GetBotByID(ID());
+        Raven_Bot* hitbot = m_pWorld->GetBotByID(msg.Sender);
+        debug_con <<ID()<< ": 얘 지울꺼야" << msg.Sender << "";
+        GetSensoryMem()->RemoveHitBots(me, hitbot);
 
-    case Msg_YouGotMeYouSOB:
-
-        IncrementScore();        
+        IncrementScore();
         //the bot this bot has just killed should be removed as the target
         m_pTargSys->ClearTarget();
 
         return true;
-
+    }
     case Msg_GunshotSound:
 
         //add the source of this sound to the bot's percepts
@@ -284,10 +292,9 @@ bool Raven_Bot::HandleMessage(const Telegram& msg)
     {        
         //TODO Msg_YouHitMe 내가 맞춘놈                  
         Raven_Bot* HitBot = m_pWorld->GetBotByID(msg.Sender);
-        //맞은넘 추가해주고싶은데 이게 맞을까
-        GetSensoryMem()->UpdateWithSoundSource(HitBot);
-
-        debug_con << "쏜놈 ID: " << msg.Receiver << "맞은놈 ID: " << msg.Sender << "";
+        //맞은넘 추가해주고싶은데 이게 맞을까        
+        GetSensoryMem()->UpdateHit(HitBot);
+        //debug_con << "쏜놈 ID: " << msg.Receiver << "맞은놈 ID: " << msg.Sender << "";
                 
        
         return true;    
