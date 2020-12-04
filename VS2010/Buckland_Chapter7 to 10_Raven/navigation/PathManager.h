@@ -21,12 +21,12 @@ class PathManager
 private:
 
   //a container of all the active search requests
-  std::list<path_planner*>  m_SearchRequests;
+  std::list<path_planner*>  m_SearchRequests;   //봇들이 요청한거 들어옴
 
   //this is the total number of search cycles allocated to the manager. 
   //Each update-step these are divided equally amongst all registered path
   //requests
-  unsigned int              m_iNumSearchCyclesPerUpdate;
+  unsigned int              m_iNumSearchCyclesPerUpdate;    //할당받은시간
 
 public:
     
@@ -61,25 +61,25 @@ public:
 template <class path_planner>
 inline void PathManager<path_planner>::UpdateSearches()
 {
-  int NumCyclesRemaining = m_iNumSearchCyclesPerUpdate;
+  int NumCyclesRemaining = m_iNumSearchCyclesPerUpdate/100;
 
   //iterate through the search requests until either all requests have been
   //fulfilled or there are no search cycles remaining for this update-step.
   std::list<path_planner*>::iterator curPath = m_SearchRequests.begin();
   while (NumCyclesRemaining-- && !m_SearchRequests.empty())
-  {
+  {     //시간이 부족하면 돌다가 맘
     //make one search cycle of this path request
-    int result = (*curPath)->CycleOnce();
+    int result = (*curPath)->CycleOnce();       //여기서 대신 루프돔
 
     //if the search has terminated remove from the list
     if ( (result == target_found) || (result == target_not_found) )
     {
-      //remove this path from the path list
+      //remove this path from the path list //다 돌렸으면 지우고
       curPath = m_SearchRequests.erase(curPath);       
-    }
-    //move on to the next
+    }   
+    //move on to the next       
     else
-    {
+    {   //다음 봇의 포인터로 옮임
       ++curPath;
     }
 

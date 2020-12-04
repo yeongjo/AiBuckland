@@ -13,7 +13,6 @@
 #include "2d/Vector2D.h"
 #include <list>
 
-
 class Raven_Bot;
 
 

@@ -57,6 +57,16 @@ Raven_Game::~Raven_Game()
   delete m_pGraveMarkers;
 }
 
+Raven_Bot* Raven_Game::GetBotByID(int id)
+{       
+    for (auto i = m_Bots.begin() ; i != m_Bots.end();++i){        
+        if ((*i)->ID() == id) {
+            return *i;
+        }            
+    }    
+    return 0;        
+}
+
 
 //---------------------------- Clear ------------------------------------------
 //
@@ -263,7 +273,7 @@ void Raven_Game::AddBots(unsigned int NumBotsToAdd)
 
     
 #ifdef LOG_CREATIONAL_STUFF
-  debug_con << "Adding bot with ID " << ttos(rb->ID()) << "";
+  debug_con  << "Adding bot with ID " << ttos(rb->ID()) << "";
 #endif
   }
 }

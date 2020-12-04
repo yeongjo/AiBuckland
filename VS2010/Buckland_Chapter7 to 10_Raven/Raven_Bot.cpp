@@ -37,6 +37,7 @@ Raven_Bot::Raven_Bot(Raven_Game* world,Vector2D pos):
                  
                  m_iMaxHealth(script->GetInt("Bot_MaxHealth")),
                  m_iHealth(script->GetInt("Bot_MaxHealth")),
+                 m_iDeadCount(0),
                  m_pPathPlanner(NULL),
                  m_pSteering(NULL),
                  m_pWorld(world),
@@ -217,67 +218,90 @@ bool Raven_Bot::isReadyForTriggerUpdate()const
 //-----------------------------------------------------------------------------
 bool Raven_Bot::HandleMessage(const Telegram& msg)
 {
-  //first see if the current goal accepts the message
-  if (GetBrain()->HandleMessage(msg)) return true;
- 
-  //handle any messages not handles by the goals
-  switch(msg.Msg)
-  {
-  case Msg_TakeThatMF:
-
-    //just return if already dead or spawning
-    if (isDead() || isSpawning()) return true;
-
-    //the extra info field of the telegram carries the amount of damage
-    ReduceHealth(DereferenceToType<int>(msg.ExtraInfo));
-
-    //if this bot is now dead let the shooter know
-    if (isDead())
+    //first see if the current goal accepts the message
+    if (GetBrain()->HandleMessage(msg)) return true;    
+    //handle any messages not handles by the goals
+    switch (msg.Msg)
     {
-      Dispatcher->DispatchMsg(SEND_MSG_IMMEDIATELY,
-                              ID(),
-                              msg.Sender,
-                              Msg_YouGotMeYouSOB,
-                              NO_ADDITIONAL_INFO);
+    case Msg_TakeThatMF:{
+        //ÃÑ ¸Â¾ÒÀ» ¶§
+        //just return if already dead or spawning
+        if (isDead() || isSpawning()) return true;
+        //the extra info field of the telegram carries the amount of damage
+        ReduceHealth(DereferenceToType<int>(msg.ExtraInfo));
+
+        //ÃÑ ¸ÂÀ» ¶§ ½ð¾ÖÇÑÅ× ¸Þ½ÃÁö º¸³»ÁÜ
+        Dispatcher->DispatchMsg(SEND_MSG_IMMEDIATELY,
+            ID(),
+            msg.Sender,
+            Msg_YouHitMe,       //msg
+            NO_ADDITIONAL_INFO);
+
+
+        //if this bot is now dead let the shooter know
+        if (isDead())
+        {
+            //Á×¾úÀ» ¶§ ³»°¡ ¸ÂÃè´ø º¤ÅÍ ÃÊ±âÈ­ ½ÃÄÑÁà¾ßÇÔ
+            Raven_Bot* me = m_pWorld->GetBotByID(ID());
+            GetSensoryMem()->RemoveHitBotsAll(me);
+            Dispatcher->DispatchMsg(SEND_MSG_IMMEDIATELY,
+                ID(),
+                msg.Sender,
+                Msg_YouGotMeYouSOB,
+                NO_ADDITIONAL_INFO);
+        }
+        return true;
+    }
+    case Msg_YouGotMeYouSOB:        {
+        //³»°¡ ¸ÂÃè´ø ¸®½ºÆ®¿¡¼­ Áö¿ö¾ßÇÔ
+        Raven_Bot* me = m_pWorld->GetBotByID(ID());
+        Raven_Bot* hitbot = m_pWorld->GetBotByID(msg.Sender);
+        debug_con <<ID()<< ": ¾ê Áö¿ï²¨¾ß" << msg.Sender << "";
+        GetSensoryMem()->RemoveHitBots(me, hitbot);
+
+        IncrementScore();
+        //the bot this bot has just killed should be removed as the target
+        m_pTargSys->ClearTarget();
+
+        return true;
+    }
+    case Msg_GunshotSound:
+
+        //add the source of this sound to the bot's percepts
+        GetSensoryMem()->UpdateWithSoundSource((Raven_Bot*)msg.ExtraInfo);
+
+        return true;
+
+    case Msg_UserHasRemovedBot:
+    {
+
+        Raven_Bot* pRemovedBot = (Raven_Bot*)msg.ExtraInfo;
+
+        GetSensoryMem()->RemoveBotFromMemory(pRemovedBot);
+
+        //if the removed bot is the target, make sure the target is cleared
+        if (pRemovedBot == GetTargetSys()->GetTarget())
+        {
+            GetTargetSys()->ClearTarget();
+        }
+
+        return true;
     }
 
-    return true;
-
-  case Msg_YouGotMeYouSOB:
-    
-    IncrementScore();
-    
-    //the bot this bot has just killed should be removed as the target
-    m_pTargSys->ClearTarget();
-
-    return true;
-
-  case Msg_GunshotSound:
-
-    //add the source of this sound to the bot's percepts
-    GetSensoryMem()->UpdateWithSoundSource((Raven_Bot*)msg.ExtraInfo);
-
-    return true;
-
-  case Msg_UserHasRemovedBot:
-    {
-
-      Raven_Bot* pRemovedBot = (Raven_Bot*)msg.ExtraInfo;
-
-      GetSensoryMem()->RemoveBotFromMemory(pRemovedBot);
-
-      //if the removed bot is the target, make sure the target is cleared
-      if (pRemovedBot == GetTargetSys()->GetTarget())
-      {
-        GetTargetSys()->ClearTarget();
-      }
-
-      return true;
+    case Msg_YouHitMe:
+    {        
+        //TODO Msg_YouHitMe ³»°¡ ¸ÂÃá³ð                  
+        Raven_Bot* HitBot = m_pWorld->GetBotByID(msg.Sender);
+        //¸ÂÀº³Ñ Ãß°¡ÇØÁÖ°í½ÍÀºµ¥ ÀÌ°Ô ¸ÂÀ»±î        
+        GetSensoryMem()->UpdateHit(HitBot);
+        //debug_con << "½ð³ð ID: " << msg.Receiver << "¸ÂÀº³ð ID: " << msg.Sender << "";
+                
+       
+        return true;    
     }
 
-
-  default: return false;
-  }
+    default: return false;
+    }
 }
 
 //------------------ RotateFacingTowardPosition -------------------------------
@@ -521,8 +545,8 @@ void Raven_Bot::Render()
   gdi->TextColor(0,255,0);
 
   if (UserOptions->m_bShowBotIDs)
-  {
-    gdi->TextAtPos(Pos().x -10, Pos().y-20, ttos(ID()));
+  {    
+    gdi->TextAtPos(Pos().x - 10, Pos().y - 20, ttos(ID()));    
   }
 
   if (UserOptions->m_bShowBotHealth)
@@ -532,7 +556,7 @@ void Raven_Bot::Render()
 
   if (UserOptions->m_bShowScore)
   {
-    gdi->TextAtPos(Pos().x-40, Pos().y+10, "Scr:"+ ttos(Score()));
+    gdi->TextAtPos(Pos().x-40, Pos().y+10, "Scr:"+ ttos(Score()) +" | Dead:" + ttos(DeadCount()));
   }    
 }
 

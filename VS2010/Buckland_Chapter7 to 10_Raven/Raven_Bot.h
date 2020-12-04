@@ -84,6 +84,9 @@ private:
   //each time this bot kills another this value is incremented
   int                                m_iScore;
   
+  //Á×ÀºÈ½¼ö ÀúÀåÇÔ
+  int								 m_iDeadCount;
+
   //the direction the bot is facing (and therefore the direction of aim). 
   //Note that this may not be the same as the bot's heading, which always
   //points in the direction of the bot's movement
@@ -128,6 +131,7 @@ public:
   Raven_Bot(Raven_Game* world, Vector2D pos);
   virtual ~Raven_Bot();
 
+  
   //the usual suspects
   void         Render();
   void         Update();
@@ -149,6 +153,8 @@ public:
   int           Score()const{return m_iScore;}
   void          IncrementScore(){++m_iScore;}
 
+  int			DeadCount() const { return m_iDeadCount; }
+
   Vector2D      Facing()const{return m_vFacing;}
   double        FieldOfView()const{return m_dFieldOfView;}
 
@@ -158,7 +164,7 @@ public:
   bool          isSpawning()const{return m_Status == spawning;}
   
   void          SetSpawning(){m_Status = spawning;}
-  void          SetDead(){m_Status = dead;}
+  void          SetDead() { m_iDeadCount++;	m_Status = dead; }
   void          SetAlive(){m_Status = alive;}
 
   //returns a value indicating the time in seconds it will take the bot
