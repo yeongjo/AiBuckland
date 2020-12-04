@@ -133,36 +133,8 @@ void Raven_SensoryMemory::UpdateHit(Raven_Bot* pBot)
         if (info.isHit == false) {
             info.isHit = true;
             //debug_con << "나는 " << m_pOwner->ID() << "이고" << pBot->ID() << "를 맞췄다. " << "";
-        }
-        
+        }        
     }
-
-
-    //const std::list<Raven_Bot*>& bots = m_pOwner->GetWorld()->GetAllBots();
-    //std::list<Raven_Bot*>::const_iterator curBot;
-
-    //for (curBot = bots.begin(); curBot != bots.end(); ++curBot)
-    //{
-    //    //make sure the bot being examined is not this bot
-    //    if (m_pOwner != *curBot)
-    //    {
-    //        MakeNewRecordIfNotAlreadyPresent(*curBot);
-
-    //        //get a reference to this bot's data
-    //        MemoryRecord& info = m_MemoryMap[*curBot];
-
-    //        //내가 맞춘애가 맞으면 넣음
-    //        if (!(std::find(info.hitBots.begin(), info.hitBots.end(), pBot) != info.hitBots.end()))
-    //        {
-    //            info.hitBots.push_back(pBot);
-    //            //debug_con << "쏜애 맞은놈 벡터에 " << m_pOwner->ID() << " 맞은애 넣음 " << (*curBot)->ID() << "";
-    //            for (int i = 0; i < info.hitBots.size(); i++)
-    //            {
-    //                debug_con << "[" << m_pOwner->ID() << "스텍]" << i << "번째 맞은놈" << info.hitBots[i]->ID() << "";
-    //            }
-    //        }
-    //    }
-    //}
 }
 
 //----------------------------- UpdateVision ----------------------------------

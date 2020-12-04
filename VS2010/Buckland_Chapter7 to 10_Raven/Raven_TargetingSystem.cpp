@@ -37,12 +37,12 @@ void Raven_TargetingSystem::Update()
     {
       double dist = Vec2DDistanceSq((*curBot)->Pos(), m_pOwner->Pos());
 
-      if (m_pOwner->ID() == 401)
+     /* if (m_pOwner->ID() == 401)
       {
           debug_con << m_pOwner->ID() << "{";
           for (int i = 0; i < HitBots.size(); i++){ debug_con << HitBots[i]->ID() << ", "; }
           debug_con << "}" << "";
-      }         
+      }         */
 
       //나를 쏘고있는가?, 나를 바라보고있는가?, 내가 쐈던 봇인가?, 가까운가, 적의 사거리가 나보다 짧은가,
       if (dist < ClosestDistSoFar)
@@ -60,17 +60,7 @@ void Raven_TargetingSystem::Update()
           if (!isCertainTarget) {              
               ClosestDistSoFar = dist;
               m_pCurrentTarget = *curBot;
-          }          
-          //Vector2D toTarget = Vec2DNormalize((*curBot)->Pos() - m_pOwner->Pos());
-          //double dot = (*curBot)->Facing().Dot(toTarget);
-          ////1에 가까울수록 나랑 마주보고있음
-          ////TODO 타겟팅 시스템          
-          //debug_con << m_pOwner->ID()<<": "<<(*curBot)->ID()<<" = " <<dot<<"";
-          //if (dot > 0) 
-          //{
-          //    ClosestDistSoFar = dist;
-          //    m_pCurrentTarget = *curBot;
-          //}          
+          }                   
       }
     }
   }
