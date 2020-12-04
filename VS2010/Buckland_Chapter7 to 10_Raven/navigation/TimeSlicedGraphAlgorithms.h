@@ -358,7 +358,7 @@ public:
 
 //-----------------------------------------------------------------------------
 template <class graph_type, class termination_condition>
-int Graph_SearchDijkstras_TS<graph_type, termination_condition>::CycleOnce()
+int Graph_SearchDijkstras_TS<graph_type, termination_condition>::CycleOnce()    //서치에서 사이클원스로 이름바뀜
 {
   //if the PQ is empty the target has not been found
 	// TODO 타임슬라이스 아닌버전과 이부분이 반복하는지 아닌지의 차이

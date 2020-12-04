@@ -180,7 +180,7 @@ LRESULT CALLBACK WindowProc (HWND   hwnd,
 
     case WM_LBUTTONDOWN:
     {
-      g_pRaven->ClickLeftMouseButton(MAKEPOINTS(lParam));
+      g_pRaven->ClickLeftMouseButton(MAKEPOINTS(lParam));      
     }
     
     break;
@@ -203,8 +203,7 @@ LRESULT CALLBACK WindowProc (HWND   hwnd,
           
           FileOpenDlg(hwnd, szFileName, szTitleName, "Raven map file (*.map)", "map");
 
-          debug_con << "Filename: " << szTitleName << "";
-
+          debug_con << "Filename: " << szTitleName << "";          
           if (strlen(szTitleName) > 0)
           {
             g_pRaven->LoadMap(szTitleName);

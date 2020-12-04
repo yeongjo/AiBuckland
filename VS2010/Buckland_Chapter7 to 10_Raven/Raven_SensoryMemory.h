@@ -47,12 +47,23 @@ public:
   //permitting a shot.
   bool        bShootable;
   
+  //Àû Ã¼·Â
+  int         iHealth;
+
+  //Àû Á×Àº È½¼ö
+  int         iDeadCount;
+
+  //³»°¡ ¸ÂÃá º¿µé
+  std::vector<Raven_Bot*> hitBots;
 
   MemoryRecord():fTimeLastSensed(-999),
             fTimeBecameVisible(-999),
             fTimeLastVisible(0),
             bWithinFOV(false),
-            bShootable(false)
+            bShootable(false),
+            iHealth(100),
+            iDeadCount(0),
+            hitBots(NULL)
   {}
 };
 
@@ -86,6 +97,7 @@ private:
 
 public:
 
+
   Raven_SensoryMemory(Raven_Bot* owner, double MemorySpan);
 
   //this method is used to update the memory map whenever an opponent makes
@@ -95,9 +107,17 @@ public:
   //this removes a bot's record from memory
   void     RemoveBotFromMemory(Raven_Bot* pBot);
 
+
+  //¸ÂÃè´ø º¿µé¿¡¼­ Áö¿î´Ù.
+  void     RemoveHitBots(Raven_Bot* mBot,Raven_Bot* pBot);
+  //¸ÂÃè´ø º¿µé ÀüºÎ¸¦ Áö¿î´Ù
+  void     RemoveHitBotsAll(Raven_Bot* mBot);
+
   //this method iterates through all the opponents in the game world and 
   //updates the records of those that are in the owner's FOV
   void     UpdateVision();
+
+  void UpdateHit(Raven_Bot* pBot);
 
   bool     isOpponentShootable(Raven_Bot* pOpponent)const;
   bool     isOpponentWithinFOV(Raven_Bot* pOpponent)const;
@@ -112,6 +132,9 @@ public:
 
   void     RenderBoxesAroundRecentlySensed()const;
 
+  //TODO ??
+  std::vector<Raven_Bot*> GetHitbots()const;
+  void EraseHitbot(Raven_Bot* pBot);
 };
 
 

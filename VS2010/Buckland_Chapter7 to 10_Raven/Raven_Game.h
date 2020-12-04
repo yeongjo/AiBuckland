@@ -86,6 +86,9 @@ public:
   Raven_Game();
   ~Raven_Game();
 
+  //ID·Î Raven_Bot* ¾ò±â
+  Raven_Bot* GetBotByID(int id);
+
   //the usual suspects
   void Render();
   void Update();
