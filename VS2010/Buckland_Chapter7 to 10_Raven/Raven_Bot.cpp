@@ -115,6 +115,7 @@ void Raven_Bot::Spawn(Vector2D pos)
     SetPos(pos);
     m_pWeaponSys->Initialize();
     RestoreHealthToMaximum();
+    m_pSensoryMem->ClearMemory();
 }
 
 //-------------------------------- Update -------------------------------------
@@ -241,9 +242,6 @@ bool Raven_Bot::HandleMessage(const Telegram& msg)
         //if this bot is now dead let the shooter know
         if (isDead())
         {
-            //죽었을 때 내가 맞췄던 벡터 초기화 시켜줘야함
-            Raven_Bot* me = m_pWorld->GetBotByID(ID());
-            GetSensoryMem()->RemoveHitBotsAll(me);
             Dispatcher->DispatchMsg(SEND_MSG_IMMEDIATELY,
                 ID(),
                 msg.Sender,
@@ -253,11 +251,10 @@ bool Raven_Bot::HandleMessage(const Telegram& msg)
         return true;
     }
     case Msg_YouGotMeYouSOB:        {
-        //내가 맞췄던 리스트에서 지워야함
-        Raven_Bot* me = m_pWorld->GetBotByID(ID());
+        //죽었으니까 걔에 관한 기록 다 지움       
         Raven_Bot* hitbot = m_pWorld->GetBotByID(msg.Sender);
-        debug_con <<ID()<< ": 얘 지울꺼야" << msg.Sender << "";
-        GetSensoryMem()->RemoveHitBots(me, hitbot);
+        //debug_con <<ID()<< ": 얘 지울꺼야" << msg.Sender << "";
+        GetSensoryMem()->RemoveBotFromMemory(hitbot);
 
         IncrementScore();
         //the bot this bot has just killed should be removed as the target
@@ -288,15 +285,12 @@ bool Raven_Bot::HandleMessage(const Telegram& msg)
         return true;
     }
 
-    case Msg_YouHitMe:
-    {        
+    case Msg_YouHitMe:    {                
         //TODO Msg_YouHitMe 내가 맞춘놈                  
         Raven_Bot* HitBot = m_pWorld->GetBotByID(msg.Sender);
-        //맞은넘 추가해주고싶은데 이게 맞을까        
+        //내 메모리에 맞은놈 기록에 맞췄다고 기록 isHit = true 
         GetSensoryMem()->UpdateHit(HitBot);
         //debug_con << "쏜놈 ID: " << msg.Receiver << "맞은놈 ID: " << msg.Sender << "";
-                
-       
         return true;    
     }
 

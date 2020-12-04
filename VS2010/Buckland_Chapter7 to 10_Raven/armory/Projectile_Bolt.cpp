@@ -67,14 +67,7 @@ void Bolt::Update()
                               m_iShooterID,
                               hit->ID(),
                               Msg_TakeThatMF,
-                              (void*)&m_iDamageInflicted);
-      
-      ////TODO 쏜애한테도 누구 맞췄다고 알려줌 여기아닌가?
-      //Dispatcher->DispatchMsg(SEND_MSG_IMMEDIATELY,
-      //                        hit->ID(),        //sender 
-      //                        m_iShooterID,     //receiver
-      //                        Msg_YouHitMe,       //msg
-      //                        (void*)&m_iDamageInflicted);
+                              (void*)&m_iDamageInflicted);    
     }
 
     //test for impact with a wall

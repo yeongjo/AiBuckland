@@ -53,8 +53,10 @@ public:
   //적 죽은 횟수
   int         iDeadCount;
 
-  //내가 맞춘 봇들
-  std::vector<Raven_Bot*> hitBots;
+  //내가 때린적 있나?
+  bool isHit;
+
+  //std::vector<Raven_Bot*> hitBots;
 
   MemoryRecord():fTimeLastSensed(-999),
             fTimeBecameVisible(-999),
@@ -63,7 +65,8 @@ public:
             bShootable(false),
             iHealth(100),
             iDeadCount(0),
-            hitBots(NULL)
+            isHit(false)
+            
   {}
 };
 
@@ -97,7 +100,7 @@ private:
 
 public:
 
-
+  void ClearMemory() { m_MemoryMap.clear(); }
   Raven_SensoryMemory(Raven_Bot* owner, double MemorySpan);
 
   //this method is used to update the memory map whenever an opponent makes
@@ -108,16 +111,17 @@ public:
   void     RemoveBotFromMemory(Raven_Bot* pBot);
 
 
-  //맞췄던 봇들에서 지운다.
-  void     RemoveHitBots(Raven_Bot* mBot,Raven_Bot* pBot);
-  //맞췄던 봇들 전부를 지운다
-  void     RemoveHitBotsAll(Raven_Bot* mBot);
+  ////날 때린 봇들에서 지운다.
+  //void     RemoveHitBots(Raven_Bot* pBot);
+  //
+  ////날 떄린 봇들 전부를 지운다 -> 내가 죽었을 때?
+  //void     RemoveHitBotsAll();
 
   //this method iterates through all the opponents in the game world and 
   //updates the records of those that are in the owner's FOV
   void     UpdateVision();
 
-  void UpdateHit(Raven_Bot* pBot);
+  void     UpdateHit(Raven_Bot* pBot);
 
   bool     isOpponentShootable(Raven_Bot* pOpponent)const;
   bool     isOpponentWithinFOV(Raven_Bot* pOpponent)const;
@@ -132,9 +136,9 @@ public:
 
   void     RenderBoxesAroundRecentlySensed()const;
 
-  //TODO ??
+  //내가 때린적있는 봇들 가져옴
   std::vector<Raven_Bot*> GetHitbots()const;
-  void EraseHitbot(Raven_Bot* pBot);
+  
 };
 
 
