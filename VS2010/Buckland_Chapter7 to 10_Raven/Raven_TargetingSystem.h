@@ -12,6 +12,7 @@
 //-----------------------------------------------------------------------------
 #include "2d/Vector2D.h"
 #include <list>
+#include "Raven_Game.h"
 
 class Raven_Bot;
 
@@ -62,6 +63,20 @@ public:
   
   //returns a pointer to the target. null if no target current.
   Raven_Bot* GetTarget()const{return m_pCurrentTarget;}
+
+  std::vector<Raven_Bot*> GetTargetBots()const {
+	  std::vector<Raven_Bot*> hitmeBots;
+	  Raven_Game* m_world = m_pOwner->GetWorld();
+	  std::list<Raven_Bot*> allBots = m_world->GetAllBots();
+	  for (auto i = allBots.begin(); i !=  allBots.end(); ++i)
+	  {
+		  if ((*i)->GetTargetBot() == m_pOwner)
+		  {
+			  hitmeBots.push_back(*i);
+		  }
+	  }
+	  return hitmeBots;
+  }
 
   //sets the target pointer to null
   void       ClearTarget(){m_pCurrentTarget=0;}
