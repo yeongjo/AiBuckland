@@ -166,13 +166,14 @@ void Goal_Think::AddGoal_AttackTarget()
   if (notPresent(goal_attack_target))
   {
     RemoveAllSubgoals();
-    AddSubgoal( new Goal_Hide(m_pOwner));
+    AddSubgoal( new Goal_AttackTarget(m_pOwner));
   }
 }
 
 void Goal_Think::AddGoal_Hide() {
     if (notPresent(goal_hide)){
         RemoveAllSubgoals();
+        AddSubgoal(new Goal_Hide(m_pOwner));
     }
 }
 

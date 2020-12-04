@@ -2,6 +2,7 @@
 
 #include "Raven_Game.h"
 #include "Raven_Map.h"
+#include "Raven_SensoryMemory.h"
 #include "debug/DebugConsole.h"
 #include "goals/Goal_MoveToPosition.h"
 #include "goals/Goal_SeekToPosition.h"
@@ -15,19 +16,29 @@ void Goal_Hide::Activate() {
 	m_dStartTime = Clock->GetCurrentTime();
 
 	//This value is used to determine if the bot becomes stuck 
-	m_dTimeToReachPos = m_pOwner->CalculateTimeToReachPosition(m_vPosition);
+	m_dTimeToReachPos = m_pOwner->CalculateTimeToReachPosition(m_vPosition) + 3;
+
+	RemoveAllSubgoals();
 	
-	// 적이 갈수없는 위치라면
-	while (true) {
-		auto map = m_pOwner->GetWorld()->GetMap();
-		m_vPosition = map->GetRandomNodeLocation();
-		if (!m_pOwner->canWalkBetween(m_pOwner->Pos(), m_vPosition)) {
-			// 위치로 이동
-			RemoveAllSubgoals();
-			AddSubgoal(new Goal_MoveToPosition(m_pOwner, m_vPosition));
-			break;
+	auto& targetBots = m_pOwner->GetSensoryMem()->GetHitbots();
+	auto map = m_pOwner->GetWorld()->GetMap();
+	if (!m_bDestinationIsSet)
+	{
+		// 적이 갈수없는 위치라면
+		while (true) {
+			for (int i = 0; i < targetBots.size(); i++)
+			{
+				if (!m_pOwner->canWalkBetween(targetBots[i]->Pos(), m_vPosition)) {
+					// 위치로 이동
+					m_vPosition = targetBots[i]->Pos();
+					break;
+				}
+				m_vPosition = map->GetRandomNodeLocation();
+			}
 		}
 	}
+	m_pOwner->GetPathPlanner()->RequestPathToPosition(m_vPosition);
+	AddSubgoal(new Goal_SeekToPosition(m_pOwner, m_vPosition));
 }
 
 int Goal_Hide::Process() {
@@ -42,10 +53,8 @@ int Goal_Hide::Process() {
 	//test to see if the bot has reached the waypoint. If so terminate the goal
 	else
 	{
-		if (m_pOwner->isAtPosition(m_vPosition))
-		{
-			m_iStatus = completed;
-		}
+		//process the subgoals
+		m_iStatus = ProcessSubgoals();
 	}
 	return m_iStatus;
 }

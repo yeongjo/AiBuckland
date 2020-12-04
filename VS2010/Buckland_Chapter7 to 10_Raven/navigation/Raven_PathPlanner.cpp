@@ -277,8 +277,8 @@ int Raven_PathPlanner::CycleOnce()const
                             Msg_PathReady,
                             pTrigger);
   }
-  if (result == search_incomplete)
-      debug_con << "BOT " << m_pOwner->ID() << " search_incomplete" <<"";
+  //if (result == search_incomplete)
+  //    debug_con << "BOT " << m_pOwner->ID() << " search_incomplete" <<"";
 
   return result;
 }
