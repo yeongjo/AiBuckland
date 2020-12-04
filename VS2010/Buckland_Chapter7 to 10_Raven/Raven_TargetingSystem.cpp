@@ -1,6 +1,7 @@
 #include "Raven_TargetingSystem.h"
 #include "Raven_Bot.h"
 #include "Raven_SensoryMemory.h"
+#include "Raven_Game.h"
 #include "debug/DebugConsole.h"
 #include <algorithm>
 
@@ -92,4 +93,16 @@ double Raven_TargetingSystem::GetTimeTargetHasBeenVisible()const
 double Raven_TargetingSystem::GetTimeTargetHasBeenOutOfView()const
 {
   return m_pOwner->GetSensoryMem()->GetTimeOpponentHasBeenOutOfView(m_pCurrentTarget);
+}
+
+std::vector<Raven_Bot*> Raven_TargetingSystem::GetTargetBots() const {
+	std::vector<Raven_Bot*> hitmeBots;
+	Raven_Game* m_world = m_pOwner->GetWorld();
+	std::list<Raven_Bot*> allBots = m_world->GetAllBots();
+	for (auto i = allBots.begin(); i != allBots.end(); ++i){
+		if ((*i)->GetTargetBot() == m_pOwner){
+			hitmeBots.push_back(*i);
+		}
+	}
+	return hitmeBots;
 }

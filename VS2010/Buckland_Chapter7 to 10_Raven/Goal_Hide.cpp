@@ -5,7 +5,6 @@
 #include "Raven_SensoryMemory.h"
 #include "debug/DebugConsole.h"
 #include "goals/Goal_MoveToPosition.h"
-#include "goals/Goal_SeekToPosition.h"
 #include "navigation/Raven_PathPlanner.h"
 #include "time/CrudeTimer.h"
 
@@ -20,25 +19,24 @@ void Goal_Hide::Activate() {
 
 	RemoveAllSubgoals();
 	
-	auto& targetBots = m_pOwner->GetSensoryMem()->GetHitbots();
+	auto targetBots = m_pOwner->GetTargetSys()->GetTargetBots();
 	auto map = m_pOwner->GetWorld()->GetMap();
-	if (!m_bDestinationIsSet)
-	{
-		// 적이 갈수없는 위치라면
-		while (true) {
-			for (int i = 0; i < targetBots.size(); i++)
-			{
-				if (!m_pOwner->canWalkBetween(targetBots[i]->Pos(), m_vPosition)) {
-					// 위치로 이동
-					m_vPosition = targetBots[i]->Pos();
-					break;
-				}
-				m_vPosition = map->GetRandomNodeLocation();
+	// 적이 갈수없는 위치라면
+	for (int i = 0; i < 30; i++){
+		bool isOtherBotsCanReach = false;
+		for (int i = 0; i < targetBots.size(); i++)
+		{
+			m_vPosition = map->GetRandomNodeLocation();
+			if (m_pOwner->canWalkBetween(targetBots[i]->Pos(), m_vPosition)) {
+				// 위치로 이동
+				isOtherBotsCanReach = true;
 			}
 		}
+		if (!isOtherBotsCanReach)
+			break;
 	}
 	m_pOwner->GetPathPlanner()->RequestPathToPosition(m_vPosition);
-	AddSubgoal(new Goal_SeekToPosition(m_pOwner, m_vPosition));
+	AddSubgoal(new Goal_MoveToPosition(m_pOwner, m_vPosition));
 }
 
 int Goal_Hide::Process() {

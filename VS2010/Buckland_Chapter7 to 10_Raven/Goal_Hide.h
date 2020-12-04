@@ -1,6 +1,5 @@
 #pragma once
 #include "Raven_Bot.h"
-#include "Goals/Goal.h"
 #include "Goals/Goal_Composite.h"
 #include "goals/Raven_Goal_Types.h"
 

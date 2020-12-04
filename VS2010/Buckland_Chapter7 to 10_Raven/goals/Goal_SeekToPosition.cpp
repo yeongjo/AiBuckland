@@ -41,8 +41,10 @@ void Goal_SeekToPosition::Activate()
   const double MarginOfError = 1.0;
 
   m_dTimeToReachPos += MarginOfError;
-	
-  m_pOwner->GetSteering()->SetTarget(GetTargetPosition());
+
+  auto direc = GetTargetPosition() - m_pOwner->Pos();
+  direc.Normalize();
+  m_pOwner->GetSteering()->SetTarget(GetTargetPosition() + direc * 10);
 
   m_pOwner->GetSteering()->SeekOn();
 }
@@ -72,7 +74,9 @@ int Goal_SeekToPosition::Process()
 
 	if(Clock->GetCurrentTime() - m_dLastSeekTime > 1.f){
         m_dLastSeekTime = Clock->GetCurrentTime();
-        m_pOwner->GetSteering()->SetTarget(GetTargetPosition());
+        auto direc = GetTargetPosition() - m_pOwner->Pos();
+        direc.Normalize();
+        m_pOwner->GetSteering()->SetTarget(GetTargetPosition() + direc * 10);
         debug_con << "BOT " << m_pOwner->ID() << " IS Seek Without Brain..." << "";
     }
   //m_iStatus = failed;
