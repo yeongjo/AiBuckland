@@ -4,11 +4,11 @@
 
 --the number of bots the game instantiates
 
-NumBots   = 3
+NumBots   = 1
 
 --this is the maximum number of search cycles allocated to *all* current path
 -- planning searches per update
-MaxSearchCyclesPerUpdateStep = 1000
+MaxSearchCyclesPerUpdateStep = 100
 
 --the name of the default map
 StartMap = "maps/Raven_DM1.map"

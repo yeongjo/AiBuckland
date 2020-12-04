@@ -8,7 +8,7 @@
 
 #include "Goal_SeekToPosition.h"
 #include "Goal_FollowPath.h"
-
+#include "Goal_MoveToPosition.h"
 
 
 //------------------------------ Activate -------------------------------------
@@ -78,7 +78,7 @@ bool Goal_Explore::HandleMessage(const Telegram& msg)
     case Msg_NoPathAvailable:
 
       m_iStatus = failed;
-
+      
       return true; //msg handled
 
     default: return false;

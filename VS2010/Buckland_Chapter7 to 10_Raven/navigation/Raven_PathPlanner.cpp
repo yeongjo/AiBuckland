@@ -262,7 +262,7 @@ int Raven_PathPlanner::CycleOnce()const
   }
 
   //let the bot know a path has been found
-  else if (result == target_found)
+  else if (result == target_found/* || result == search_incomplete*/)
   {
     //if the search was for an item type then the final node in the path will
     //represent a giver trigger. Consequently, it's worth passing the pointer
@@ -277,6 +277,8 @@ int Raven_PathPlanner::CycleOnce()const
                             Msg_PathReady,
                             pTrigger);
   }
+  if (result == search_incomplete)
+      debug_con << "BOT " << m_pOwner->ID() << " search_incomplete" <<"";
 
   return result;
 }

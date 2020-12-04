@@ -21,8 +21,12 @@ private:
   //this records the time this goal was activated
   double     m_dStartTime;
 
+  double m_dLastSeekTime;
+
   //returns true if a bot gets stuck
   bool      isStuck()const;
+
+  Vector2D GetTargetPosition();
 
 public:
 

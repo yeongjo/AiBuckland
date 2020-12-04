@@ -18,6 +18,7 @@
 #include "ExploreGoal_Evaluator.h"
 #include "AttackTargetGoal_Evaluator.h"
 #include "DodgeBulletGoal_Evaluator.h"
+#include "../Goal_Hide.h"
 
 
 Goal_Think::Goal_Think(Raven_Bot* pBot):Goal_Composite<Raven_Bot>(pBot, goal_think)
@@ -165,8 +166,14 @@ void Goal_Think::AddGoal_AttackTarget()
   if (notPresent(goal_attack_target))
   {
     RemoveAllSubgoals();
-    AddSubgoal( new Goal_AttackTarget(m_pOwner));
+    AddSubgoal( new Goal_Hide(m_pOwner));
   }
+}
+
+void Goal_Think::AddGoal_Hide() {
+    if (notPresent(goal_hide)){
+        RemoveAllSubgoals();
+    }
 }
 
 //-------------------------- Queue Goals --------------------------------------

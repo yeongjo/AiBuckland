@@ -47,7 +47,7 @@ double DodgeBulletGoal_Evaluator::CalculateDesirability(Raven_Bot* pBot)
 //-----------------------------------------------------------------------------
 void DodgeBulletGoal_Evaluator::SetGoal(Raven_Bot* pBot)
 {
-  pBot->GetBrain()->AddGoal_GetItem(type_health); 
+  pBot->GetBrain()->AddGoal_Hide();
 }
 
 //-------------------------- RenderInfo ---------------------------------------

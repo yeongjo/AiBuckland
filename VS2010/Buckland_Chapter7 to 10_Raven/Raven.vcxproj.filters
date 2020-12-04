@@ -271,6 +271,9 @@
     <ClCompile Include="goals\DodgeBulletGoal_Evaluator.cpp">
       <Filter>AI\goals\goal evaluation</Filter>
     </ClCompile>
+    <ClCompile Include="Goal_Hide.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Raven_Bot.h">
@@ -612,6 +615,7 @@
     <ClInclude Include="goals\DodgeBulletGoal_Evaluator.h">
       <Filter>AI\goals\goal evaluation</Filter>
     </ClInclude>
+    <ClInclude Include="Goal_Hide.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Params.lua">
