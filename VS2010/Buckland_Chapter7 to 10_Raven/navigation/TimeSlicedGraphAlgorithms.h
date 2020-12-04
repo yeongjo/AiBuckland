@@ -361,6 +361,7 @@ template <class graph_type, class termination_condition>
 int Graph_SearchDijkstras_TS<graph_type, termination_condition>::CycleOnce()    //서치에서 사이클원스로 이름바뀜
 {
   //if the PQ is empty the target has not been found
+	// TODO 타임슬라이스 아닌버전과 이부분이 반복하는지 아닌지의 차이
   if (m_pPQ->empty())
   {
     return target_not_found;
@@ -371,7 +372,7 @@ int Graph_SearchDijkstras_TS<graph_type, termination_condition>::CycleOnce()    
 
   //move this node from the frontier to the spanning tree
   m_ShortestPathTree[NextClosestNode] = m_SearchFrontier[NextClosestNode];
-
+	
   //if the target has been found exit
   if (termination_condition::isSatisfied(m_Graph, m_iTarget, NextClosestNode))
   {
