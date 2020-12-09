@@ -17,7 +17,7 @@
 #include "GetHealthGoal_Evaluator.h"
 #include "ExploreGoal_Evaluator.h"
 #include "AttackTargetGoal_Evaluator.h"
-#include "DodgeBulletGoal_Evaluator.h"
+#include "HideFromBotGoal_Evaluator.h"
 #include "../Goal_Hide.h"
 
 
@@ -35,19 +35,20 @@ Goal_Think::Goal_Think(Raven_Bot* pBot):Goal_Composite<Raven_Bot>(pBot, goal_thi
   double RailgunBias = RandInRange(LowRangeOfBias, HighRangeOfBias);
   double ExploreBias = RandInRange(LowRangeOfBias, HighRangeOfBias);
   double AttackBias = RandInRange(LowRangeOfBias, HighRangeOfBias);
-  double DodgeBias = RandInRange(LowRangeOfBias, HighRangeOfBias);  //ÃÑ¾ËÇÇÇÏ±â
+  double HideBias = RandInRange(LowRangeOfBias, HighRangeOfBias);  //¼û±â
 
   //create the evaluator objects
   m_Evaluators.push_back(new GetHealthGoal_Evaluator(HealthBias));
   m_Evaluators.push_back(new ExploreGoal_Evaluator(ExploreBias));
   m_Evaluators.push_back(new AttackTargetGoal_Evaluator(AttackBias));
-  //m_Evaluators.push_back(new GetWeaponGoal_Evaluator(ShotgunBias,
-  //                                                   type_shotgun));
-  //m_Evaluators.push_back(new GetWeaponGoal_Evaluator(RailgunBias,
-  //                                                   type_rail_gun));
-  //m_Evaluators.push_back(new GetWeaponGoal_Evaluator(RocketLauncherBias,
-  //                                                   type_rocket_launcher));
-  m_Evaluators.push_back(new DodgeBulletGoal_Evaluator(DodgeBias));
+  m_Evaluators.push_back(new GetWeaponGoal_Evaluator(ShotgunBias,
+                                                     type_shotgun));
+  m_Evaluators.push_back(new GetWeaponGoal_Evaluator(RailgunBias,
+                                                     type_rail_gun));
+  m_Evaluators.push_back(new HideFromBotGoal_Evaluator(HideBias));
+  m_Evaluators.push_back(new GetWeaponGoal_Evaluator(RocketLauncherBias,
+                                                     type_rocket_launcher));
+  
 }
 
 //----------------------------- dtor ------------------------------------------
@@ -197,7 +198,7 @@ void Goal_Think::RenderEvaluations(int left, int top)const
   {
     (*curDes)->RenderInfo(Vector2D(left, top), m_pOwner);
 
-    left += 75;
+    left += 70;
   }
 }
 

@@ -1,4 +1,4 @@
-#include "DodgeBulletGoal_Evaluator.h"
+#include "HideFromBotGoal_Evaluator.h"
 #include "../Raven_ObjectEnumerations.h"
 #include "Goal_Think.h"
 #include "Raven_Goal_Types.h"
@@ -8,7 +8,7 @@
 
 //---------------------- CalculateDesirability -------------------------------------
 //-----------------------------------------------------------------------------
-double DodgeBulletGoal_Evaluator::CalculateDesirability(Raven_Bot* pBot)
+double HideFromBotGoal_Evaluator::CalculateDesirability(Raven_Bot* pBot)
 {
     //pBot 사정거리에 2명 이상이 있고 그 2명의 타겟이 나일 경우 숫자 높아짐
     double ClosestDistSoFar = MaxDouble;
@@ -44,18 +44,14 @@ double DodgeBulletGoal_Evaluator::CalculateDesirability(Raven_Bot* pBot)
 
 //----------------------------- SetGoal ---------------------------------------
 //-----------------------------------------------------------------------------
-void DodgeBulletGoal_Evaluator::SetGoal(Raven_Bot* pBot)
+void HideFromBotGoal_Evaluator::SetGoal(Raven_Bot* pBot)
 {
   pBot->GetBrain()->AddGoal_Hide();
 }
 
 //-------------------------- RenderInfo ---------------------------------------
 //-----------------------------------------------------------------------------
-void DodgeBulletGoal_Evaluator::RenderInfo(Vector2D Position, Raven_Bot* pBot)
+void HideFromBotGoal_Evaluator::RenderInfo(Vector2D Position, Raven_Bot* pBot)
 {
-  gdi->TextAtPos(Position, "Hide: " + ttos(CalculateDesirability(pBot), 2));
-  return;
-  
-  std::string s = ttos(1-Raven_Feature::Health(pBot)) + ", " + ttos(Raven_Feature::DistanceToItem(pBot, type_health));
-  gdi->TextAtPos(Position+Vector2D(0,15), s);
+  gdi->TextAtPos(Position, "Hide: " + ttos(CalculateDesirability(pBot), 2));  
 }
