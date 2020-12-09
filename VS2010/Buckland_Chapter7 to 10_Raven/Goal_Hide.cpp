@@ -24,9 +24,9 @@ void Goal_Hide::Activate() {
 	// 적이 갈수없는 위치라면
 	for (int i = 0; i < 30; i++){
 		bool isOtherBotsCanReach = false;
+		m_vPosition = map->GetRandomNodeLocation();
 		for (int i = 0; i < targetBots.size(); i++)
 		{
-			m_vPosition = map->GetRandomNodeLocation();
 			if (m_pOwner->canWalkBetween(targetBots[i]->Pos(), m_vPosition)) {
 				// 위치로 이동
 				isOtherBotsCanReach = true;
