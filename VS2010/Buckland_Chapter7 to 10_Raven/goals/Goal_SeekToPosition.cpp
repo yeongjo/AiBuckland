@@ -32,7 +32,8 @@ void Goal_SeekToPosition::Activate()
   m_iStatus = active;
   
   //record the time the bot starts this goal
-  m_dLastSeekTime = m_dStartTime = Clock->GetCurrentTime();
+  m_dStartTime = Clock->GetCurrentTime();
+  m_dLastSeekTime = m_dStartTime - 5;
   
   //This value is used to determine if the bot becomes stuck 
   m_dTimeToReachPos = m_pOwner->CalculateTimeToReachPosition(m_vPosition);
@@ -41,10 +42,6 @@ void Goal_SeekToPosition::Activate()
   const double MarginOfError = 1.0;
 
   m_dTimeToReachPos += MarginOfError;
-
-  auto direc = GetTargetPosition() - m_pOwner->Pos();
-  direc.Normalize();
-  m_pOwner->GetSteering()->SetTarget(GetTargetPosition() + direc * 10);
 
   m_pOwner->GetSteering()->SeekOn();
 }
@@ -73,13 +70,11 @@ int Goal_SeekToPosition::Process()
   }
 
 	if(Clock->GetCurrentTime() - m_dLastSeekTime > 1.f){
-        m_dLastSeekTime = Clock->GetCurrentTime();
-        auto direc = GetTargetPosition() - m_pOwner->Pos();
-        direc.Normalize();
-        m_pOwner->GetSteering()->SetTarget(GetTargetPosition() + direc * 10);
-        debug_con << "BOT " << m_pOwner->ID() << " IS Seek Without Brain..." << "";
-    }
-  //m_iStatus = failed;
+	    m_dLastSeekTime = Clock->GetCurrentTime();
+        m_vDirec = GetTargetApproximateDirection();
+	    debug_con << "BOT " << m_pOwner->ID() << " IS Seek Without Brain..." << "";
+	}
+	m_pOwner->GetSteering()->SetTarget(m_pOwner->Pos() + m_vDirec * 100);
   return m_iStatus;
 }
 
@@ -102,7 +97,7 @@ bool Goal_SeekToPosition::isStuck()const
   return false;
 }
 
-Vector2D Goal_SeekToPosition::GetTargetPosition() {
+Vector2D Goal_SeekToPosition::GetTargetApproximateDirection() {
     int playerClosestNode = m_pOwner->GetPathPlanner()->GetClosestNodeToPosition(m_pOwner->Pos());
     int TargetClosestNode = m_pOwner->GetPathPlanner()->GetClosestNodeToPosition(m_vPosition);
     auto& graph = m_pOwner->GetWorld()->GetMap()->GetNavGraph();
@@ -121,7 +116,10 @@ Vector2D Goal_SeekToPosition::GetTargetPosition() {
             targetNodeIdx = pE->To();
         }
     }
-    return graph.GetNode(targetNodeIdx).Pos();
+    auto pos = graph.GetNode(targetNodeIdx).Pos();
+    auto direc = pos - m_pOwner->Pos();
+    direc.Normalize();
+    return direc;
 }
 
 

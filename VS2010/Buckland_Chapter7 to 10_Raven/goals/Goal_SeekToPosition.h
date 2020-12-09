@@ -15,6 +15,8 @@ private:
   //the position the bot is moving to
   Vector2D  m_vPosition;
 
+  Vector2D m_vDirec;
+
   //the approximate time the bot should take to travel the target location
   double     m_dTimeToReachPos;
   
@@ -26,7 +28,7 @@ private:
   //returns true if a bot gets stuck
   bool      isStuck()const;
 
-  Vector2D GetTargetPosition();
+  Vector2D GetTargetApproximateDirection();
 
 public:
 

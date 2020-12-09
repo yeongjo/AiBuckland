@@ -8,7 +8,7 @@ NumBots   = 3
 
 --this is the maximum number of search cycles allocated to *all* current path
 -- planning searches per update
-MaxSearchCyclesPerUpdateStep = 100000
+MaxSearchCyclesPerUpdateStep = 0
 
 --the name of the default map
 StartMap = "maps/Raven_DM1.map"
