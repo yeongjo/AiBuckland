@@ -106,18 +106,16 @@ Vector2D Goal_SeekToPosition::GetTargetPosition() {
     int playerClosestNode = m_pOwner->GetPathPlanner()->GetClosestNodeToPosition(m_pOwner->Pos());
     int TargetClosestNode = m_pOwner->GetPathPlanner()->GetClosestNodeToPosition(m_vPosition);
     auto& graph = m_pOwner->GetWorld()->GetMap()->GetNavGraph();
-    //m_pOwner->GetPathPlanner()->GetCostToNode(TargetClosestNode);
+	
     double smallestCost = 100000;
     int targetNodeIdx = -1;
+	
     typedef typename Raven_Map::NavGraph::EdgeType Edge;
     Raven_Map::NavGraph::ConstEdgeIterator ConstEdgeItr(graph, playerClosestNode);
-    for (const Edge* pE = ConstEdgeItr.begin();
-        !ConstEdgeItr.end();
-        pE = ConstEdgeItr.next())
+    for (const Edge* pE = ConstEdgeItr.begin(); !ConstEdgeItr.end(); pE = ConstEdgeItr.next())
     {
         double HCost = Heuristic_Euclid::Calculate(graph, TargetClosestNode, pE->To());
-        //calculate the 'real' cost to this node from the source (G)
-        double GCost = /*m_GCosts[NextClosestNode] + */pE->Cost();
+        double GCost = pE->Cost();
         if (HCost + GCost < smallestCost) {
             smallestCost = HCost + GCost;
             targetNodeIdx = pE->To();
