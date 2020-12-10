@@ -464,7 +464,7 @@ int WINAPI WinMain (HINSTANCE hInstance,
 	  //exit the application
 		return 0;
   }
-		
+  MessageBox(NULL, "2016180024 송영조  2016180028 염태림", "학번 이름", 0);
 
   try
   {  		 
