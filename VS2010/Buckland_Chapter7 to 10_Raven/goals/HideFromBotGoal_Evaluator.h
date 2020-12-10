@@ -14,11 +14,11 @@
 #include "Goal_Evaluator.h"
 #include "../Raven_Bot.h"
 
-class DodgeBulletGoal_Evaluator : public Goal_Evaluator
+class HideFromBotGoal_Evaluator : public Goal_Evaluator
 {
 public:
 
-    DodgeBulletGoal_Evaluator(double bias) :Goal_Evaluator(bias) {}
+    HideFromBotGoal_Evaluator(double bias) :Goal_Evaluator(bias) {}
 
     double CalculateDesirability(Raven_Bot* pBot);
 

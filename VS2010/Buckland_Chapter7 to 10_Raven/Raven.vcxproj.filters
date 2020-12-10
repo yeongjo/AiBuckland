@@ -268,11 +268,11 @@
     <ClCompile Include="..\Common\misc\WindowUtils.cpp">
       <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="goals\DodgeBulletGoal_Evaluator.cpp">
-      <Filter>AI\goals\goal evaluation</Filter>
-    </ClCompile>
     <ClCompile Include="Goal_Hide.cpp">
       <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="goals\HideFromBotGoal_Evaluator.cpp">
+      <Filter>AI\goals\goal evaluation</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -612,10 +612,10 @@
     <ClInclude Include="..\Common\misc\WindowUtils.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="goals\DodgeBulletGoal_Evaluator.h">
+    <ClInclude Include="Goal_Hide.h" />
+    <ClInclude Include="goals\HideFromBotGoal_Evaluator.h">
       <Filter>AI\goals\goal evaluation</Filter>
     </ClInclude>
-    <ClInclude Include="Goal_Hide.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Params.lua">
